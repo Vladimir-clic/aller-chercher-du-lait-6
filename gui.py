@@ -32,6 +32,9 @@ class game_gui(tk.Tk) :
     def show_frame(self, page):
         frame = self.frames[page]
         frame.tkraise()
+        # Si la page a une méthode refresh, on l'appelle
+        if hasattr(frame, "refresh"):
+            frame.refresh()
 
 
 # lancer la boucle graphique

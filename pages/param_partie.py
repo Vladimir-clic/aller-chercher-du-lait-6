@@ -20,9 +20,8 @@ class Param_partie(tk.Frame):
         # fonction appelée quand on clique
         def valider():
             nom = entry.get()  # récupère ce qui est tapé
-            #label_resultat.config(text="Bonjour " + nom)
-            Create_caracter(nom)
-            print("hello")
+
+            controller.joueur = Create_caracter(nom)
             controller.show_frame(Jeu)
             
             

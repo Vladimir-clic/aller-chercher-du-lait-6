@@ -26,7 +26,7 @@ def Create_caracter(nomdujoueur) :
 
 def achetervache(j, v) :
     #print(f"\n\n {j.nom} part à la ferme acheter une vache \n")
-
+    print(v.nom)
     v.nombre = v.nombre + 1
 
     j.argent = j.argent - v.prix
@@ -35,3 +35,8 @@ def achetervache(j, v) :
                     
 def test():
     print("Test réussi")
+
+def test2(j) :
+    j.lait += 1
+    print(j.lait)
+    print("hello")

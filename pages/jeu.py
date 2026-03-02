@@ -14,7 +14,6 @@ class Jeu(tk.Frame):
         self.zone_boutons.pack()
 
 
-
     def refresh(self):
 
         # Nettoyer anciens boutons
@@ -23,10 +22,26 @@ class Jeu(tk.Frame):
 
         player = self.controller.joueur
 
+        #crée un lien entre front et back
+        self.lait_var = tk.StringVar()
+        self.lait_var.set("litre de lait : " + str(player.lait))
+
+        label = tk.Label(self, text= self.lait_var, font=("Arial", 16))
+        label.pack()
+
+        tk.Button(
+                self.zone_boutons,
+                text="Vendre lait",
+                #command=achetervache(player, vache)
+                command=lambda: test2(player)
+            ).pack()
+        
+
+
+
         for vache in player.vaches:
             tk.Button(
                 self.zone_boutons,
                 text=vache.nom,
-                command=achetervache(player, vache)
-                #command=test
+                command=lambda: achetervache(player, vache)
             ).pack()

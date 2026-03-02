@@ -9,7 +9,7 @@ class Options(tk.Frame):
         label.pack()
 
         tk.Button(
-            self, 
+            self,
             text="Retour", 
             #command=Menu
             ).pack()

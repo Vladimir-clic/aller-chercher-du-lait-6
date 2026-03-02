@@ -26,7 +26,7 @@ class Jeu(tk.Frame):
         self.lait_var = tk.StringVar()
         self.lait_var.set("litre de lait : " + str(player.lait))
 
-        label = tk.Label(self, text= self.lait_var, font=("Arial", 16))
+        label = tk.Label(self, textvariable= self.lait_var, font=("Arial", 16))
         label.pack()
 
         tk.Button(

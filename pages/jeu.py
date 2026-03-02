@@ -1,4 +1,5 @@
 import tkinter as tk
+
 from game_logic import *
 
 class Jeu(tk.Frame):
@@ -33,15 +34,22 @@ class Jeu(tk.Frame):
                 self.zone_boutons,
                 text="Vendre lait",
                 #command=achetervache(player, vache)
-                command=lambda: test2(player)
+                command=lambda: self.vendre_lait(player)
             ).pack()
-        
-
 
 
         for vache in player.vaches:
             tk.Button(
                 self.zone_boutons,
                 text=vache.nom,
-                command=lambda: achetervache(player, vache)
+                command=lambda v=vache : achetervache(player, v)
             ).pack()
+
+        laitpartour(player)
+
+
+
+
+    def vendre_lait(self, player):
+        clicpourlait(player)  # logique backend
+        self.lait_var.set("litre de lait : " + str(player.lait))  # mise à jour visuelle

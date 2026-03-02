@@ -1,4 +1,6 @@
 from models import listejoueur, listevache, vache, joueur
+import time
+import threading
 
 def Create_caracter(nomdujoueur) :
 
@@ -36,7 +38,25 @@ def achetervache(j, v) :
 def test():
     print("Test réussi")
 
-def test2(j) :
+def clicpourlait(j) :
     j.lait += 1
     print(j.lait)
     print("hello")
+
+
+
+
+def laitpartour(j) :
+    mon_thread = threading.Thread(target=laitpermanent(j, mon_thread))
+    
+
+def laitpermanent(j, thread):  
+    thread.start()  
+    while j.lait < 10000 :
+        for k in j.vaches :
+            j.lait = j.lait + (k.lait * k.nombre)
+        print(j.lait)
+        time.sleep(1)
+
+    thread.join()
+    

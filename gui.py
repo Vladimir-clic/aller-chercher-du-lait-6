@@ -12,7 +12,7 @@ class game_gui(tk.Tk) :
         # créer la fenêtre
         super().__init__()
         self.title("Vache à Lait 🐄")
-        self.geometry("600x400")
+        self.geometry("500x400")
 
         container = tk.Frame(self)
         container.pack(fill="both", expand=True)

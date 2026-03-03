@@ -18,7 +18,7 @@ class Jeu(tk.Frame):
 
         self.configure(bg="#2e2e2e")
 
-        self.header = tk.Frame(self, bg="#1e1e1e")
+        self.header = tk.Frame(self, bg="#040404")
         self.header.pack(fill="x")
 
         self.body = tk.Frame(self, bg="#2e2e2e")
@@ -30,6 +30,8 @@ class Jeu(tk.Frame):
         self.actions = tk.Frame(self.body, bg="#2e2e2e")
         self.actions.pack(side="left", expand=True)
 
+        
+
 
     def refresh(self):
 
@@ -40,7 +42,7 @@ class Jeu(tk.Frame):
         player = self.controller.joueur
 
         
-        self.label = tk.Label(self, text="Bienvenue dans le jeu " + player.nom)
+        self.label = tk.Label(self.header, text="Bienvenue dans le jeu " + player.nom)
         self.label.pack()
 
 
@@ -48,33 +50,36 @@ class Jeu(tk.Frame):
         self.lait_var = tk.StringVar()
         self.lait_var.set("litre de lait : " + str(player.lait))
 
-        label = tk.Label(self, textvariable= self.lait_var, font=("Arial", 16))
+        label = tk.Label(self.header, textvariable= self.lait_var, font=("Arial", 9))
         label.pack()
 
         #même chose pour l'argent
         self.argent_var = tk.StringVar()
         self.argent_var.set("Argent : " + str(player.argent) + " lacteuros")
 
-        label = tk.Label(self, textvariable= self.argent_var, font=("Arial", 16))
+        label = tk.Label(self.header, textvariable= self.argent_var, font=("Arial", 9))
         label.pack()
 
         #même chose pour le temps
         self.temps_var = tk.StringVar()
         self.temps_var.set("Temps : " + str(self.temps) + " secondes")
 
-        label = tk.Label(self, textvariable= self.temps_var, font=("Arial", 16))
+        label = tk.Label(self.header, textvariable= self.temps_var, font=("Arial", 9))
         label.pack()
 
         
 
 
     #bouton pour obtenir du lait
-        tk.Button(
-                self.actions,
-                text="Avoir du lait",
-                #command=achetervache(player, vache)
-                command=lambda: clicpourlait(player)
-            ).pack()
+        self.vache_img = tk.PhotoImage(file="images/vache1.png")
+
+        self.bouton_vache = tk.Button(
+            self.actions,
+            image=self.vache_img,
+            command=lambda: clicpourlait(player),
+            bd=0
+        )
+        self.bouton_vache.pack(pady=20)
         
 
     #bouton pour vendre son lait

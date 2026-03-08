@@ -16,7 +16,7 @@ def Create_caracter(nomdujoueur) :
         nouvel_id = max(j.id for j in listejoueur) + 1
 
         
-    joueur1 = joueur(nouvel_id, nomdujoueur, 3, [], 1, 0)
+    joueur1 = joueur(nouvel_id, nomdujoueur, 0, [], 1, 0)
     listejoueur.append(joueur1)
 
     #for j in listejoueur : 
@@ -63,6 +63,40 @@ def vendrelait(j):
     j.argent += j.lait
     j.lait = 0
 
+def simplificateur(argent):
+    strargent = str(argent)
+    listechiffre = list(strargent)
+
+    if len(listechiffre) > 6:
+        for i in range(5):
+            del listechiffre[-1]
+        listechiffre.append(listechiffre[-1])
+        listechiffre[-2] = ","
+
+        nombre = ''.join(listechiffre)
+        print(nombre + " M")
+        return(nombre + " M")
+    
+    elif len(listechiffre) > 3:
+        for i in range(2):
+            del listechiffre[-1]
+
+        listechiffre.append(listechiffre[-1])
+        listechiffre[-2] = ","
+        nombre = ''.join(listechiffre)
+        print(nombre + " k")
+        return(nombre + " k")
+
+    elif len(listechiffre) <= 3 :
+        nombre = ''.join(listechiffre)
+        print(nombre)
+        return(nombre)
+
+        
+
+simplificateur(12700000)
+simplificateur(1582)
+simplificateur(15)
 
 
 

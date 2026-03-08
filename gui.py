@@ -12,10 +12,16 @@ class game_gui(tk.Tk) :
         # créer la fenêtre
         super().__init__()
         self.title("Vache à Lait 🐄")
-        self.geometry("500x400")
+        self.minsize(500,400)
+        #self.geometry("500x400")
 
+        #initialisation des conteneurs
         container = tk.Frame(self)
         container.pack(fill="both", expand=True)
+
+        #rendre le conteneur principal redimensionnable
+        container.grid_rowconfigure(0, weight = 1)
+        container.grid_columnconfigure(0, weight = 1)
 
         # dictionnaire pour stocker les pages
         self.frames = {}

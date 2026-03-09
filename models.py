@@ -1,4 +1,6 @@
 #initialisation de la classe joueur
+import random
+
 class joueur :
     def __init__(self, id, nom, argent, vaches, jour, lait):
         self.id = id
@@ -30,5 +32,21 @@ vache6 = vache(6,"Holstein", 1000000, 120, 0, "images/holstein.png")
 vache7 = vache(7,"Nélore", 50000000, 300, 0, "images/nelore.png")
 
 listevache = [vache1, vache2, vache3, vache4, vache5, vache6, vache7]
+
+class recrue : 
+    def __init__(self, id, nom, age, prix, clic, peremption, img):
+        self.id = id
+        self.nom = nom 
+        self.age = age
+        self.prix = prix #prix d'emploi
+        self.clic = clic #capacité de clic
+        self.peremption = peremption #temps de vie si pas acheté
+        self.img = img    
+
+recrue1 = recrue(1, "Johnny", 19, 10, random.randrange(10), 7, "images/recrue1.png")
+recrue2 = recrue(2, "Tonny", 19, 10, 1, 8, "images/recrue1.png")
+
+listerecrue = [recrue1, recrue2]
+
 
 

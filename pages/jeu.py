@@ -1,5 +1,6 @@
 import tkinter as tk
 import time
+import random
 
 from game_logic import *
 
@@ -14,36 +15,69 @@ class Jeu(tk.Frame):
         self.zone_boutons.pack()
 
         self.vache_vars = {}
+        self.recrue_vars = {}
+
+        #pour stocker les images
+        self.images_cache = {}
+        self.images2_cache = {}
+
         self.temps = 0
         self.laitpartour = 0
 
-        #mettre des types 1
+
+
+
+
+        #mettre des types
         self.configure(bg="#2e2e2e")
 
+
+        #header pour les éléments en haut
         self.header = tk.Frame(self, bg="#040404")
         self.header.pack(fill="x")
 
+        #footer pour les éléments en bas
+        self.footer = tk.Frame(self, bg="#040404")
+        self.footer.pack(fill='both', side='bottom')
+
+        
+        #body pour contenir les actions et le shop
         self.body = tk.Frame(self, bg="#2e2e2e")
         self.body.pack(expand=True, fill="both")
 
+        self.body.columnconfigure(0, weight=1)   # actions
+        self.body.columnconfigure(1, weight=4)   # market
+        self.body.rowconfigure(0, weight=1)
+
+
+        #action pour les éléments à gauche
         self.actions = tk.Frame(self.body, bg="#2e2e2e")
-        self.actions.pack(side="left", expand=True)
+        self.actions.grid(row=0, column=0, sticky="nsew")
+        
+        #market pour les recrues et les vaches
+        self.market = tk.Frame(self.body,  bg="#5D4FB3")
+        self.market.grid(row=0, column=1, sticky="nsew")
 
+        self.market.columnconfigure(0, weight=1)   # coworker
+        self.market.columnconfigure(1, weight=3)   # shop
+        self.market.rowconfigure(0, weight=1)
 
+        
+        
 
-
-        self.shop1 = tk.Frame(self.body, bg="#252525")
-        self.shop1.pack(side="right", fill="y", padx=10)
+        #shop pour les éléments à droite
+        self.shop1 = tk.Frame(self.market, bg="#252525")
+        self.shop1.grid(row=0, column=1, sticky="nsew")
+        #self.shop1.pack(side="right", fill="y", padx=10)
 
         # Canvas pour permettre le scroll
         self.shop_canvas = tk.Canvas(self.shop1, bg="#252525", highlightthickness=0)
         self.shop_canvas.pack(side="left", fill="both", expand=True)
-
         # Barre de scroll
-        self.scrollbar = tk.Scrollbar(self.shop1, orient="vertical", command=self.shop_canvas.yview)
-        self.scrollbar.pack(side="right", fill="y")
+        self.scrollbar_shop = tk.Scrollbar(self.shop1, orient="vertical", command=self.shop_canvas.yview)
+        self.scrollbar_shop.pack(side="right", fill="y")
 
-        self.shop_canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.shop_canvas.configure(yscrollcommand=self.scrollbar_shop.set)
 
         # Frame interne qui contiendra les boutons
         self.shop = tk.Frame(self.shop_canvas, bg="#252525")
@@ -54,6 +88,47 @@ class Jeu(tk.Frame):
             "<Configure>",
             lambda e: self.shop_canvas.configure(scrollregion=self.shop_canvas.bbox("all"))
         )
+
+        #ajouter le scroll molette au shop 
+        self.shop_canvas.bind(
+            "<MouseWheel>",
+            lambda e: self.shop_canvas.yview_scroll(int(-1*(e.delta/120)), "units")
+        )
+
+
+        #coworker pour les éléments à gauche du market
+        self.coworker1 = tk.Frame(self.market, bg="#252525")
+        self.coworker1.grid(row=0, column=0, sticky="nsew")
+        #self.coworker1.pack(side="left", fill="y", padx=10)
+
+        # Canvas pour permettre le scroll
+        self.coworker_canvas = tk.Canvas(self.coworker1, bg="#252525", highlightthickness=0)
+        self.coworker_canvas.pack(side="left", fill="both", expand=True)
+        # Barre de scroll
+        self.scrollbar_coworker = tk.Scrollbar(self.coworker1, orient="vertical", command=self.coworker_canvas.yview)
+        self.scrollbar_coworker.pack(side="right", fill="y")
+
+        self.coworker_canvas.configure(yscrollcommand=self.scrollbar_coworker.set)
+
+        # Frame interne qui contiendra les boutons
+        self.coworker = tk.Frame(self.coworker_canvas, bg="#252525")
+
+        self.coworker_canvas.create_window((0, 0), window=self.coworker, anchor="nw")
+
+        self.coworker.bind(
+            "<Configure>",
+            lambda e: self.coworker_canvas.configure(scrollregion=self.coworker_canvas.bbox("all"))
+        )
+
+        #ajouter le scroll molette au coworker 
+        self.coworker_canvas.bind(
+            "<MouseWheel>",
+            lambda e: self.coworker_canvas.yview_scroll(int(-1*(e.delta/120)), "units")
+        )
+
+
+
+
 
     def miseajour(self, player) : 
         self.lait_var.set("litre de lait : " + simplificateur(player.lait))
@@ -81,7 +156,7 @@ class Jeu(tk.Frame):
         self.lait_var = tk.StringVar()
         self.lait_var.set("litre de lait : " + str(simplificateur(player.lait)))
 
-        label = tk.Label(self.header, textvariable= self.lait_var, font=("Arial", 9))
+        label = tk.Label(self.actions, textvariable= self.lait_var, font=("Arial", 9))
         label.pack()
 
         #même chose pour l'argent
@@ -104,7 +179,7 @@ class Jeu(tk.Frame):
         self.temps_var = tk.StringVar()
         self.temps_var.set("Temps : " + str(self.temps) + " secondes")
 
-        label = tk.Label(self.header, textvariable= self.temps_var, font=("Arial", 9))
+        label = tk.Label(self.footer, textvariable= self.temps_var, font=("Arial", 9))
         label.pack()
 
         
@@ -142,6 +217,10 @@ class Jeu(tk.Frame):
         self.vache_vars = {}
         self.boutons_achat = {}
 
+
+
+    #def vente_vache(self, player) : 
+
     #création d'un bouton pour chaque vaches
         for vache in player.vaches:
 
@@ -154,15 +233,15 @@ class Jeu(tk.Frame):
             frame_vache = tk.Frame(self.shop, bg="#3a3a3a", bd=1, relief="solid")
             frame_vache.pack(fill="x", pady=5, padx=5)
 
-            masque = tk.Frame(frame_vache, bg="black")
-
-            img = tk.PhotoImage(file=vache.img)
+            #img = tk.PhotoImage(file=vache.img)
             #img = img.subsample(2,2)
 
-            if not hasattr(self, "images_vaches"):
-                self.images_vaches = []
+            #charger les images dans images_cache si pas déjà fait
+            if vache.img not in self.images_cache:
+                self.images_cache[vache.img] = tk.PhotoImage(file=vache.img)
 
-            self.images_vaches.append(img)
+            img = self.images_cache[vache.img]
+
 
             # image
             tk.Label(frame_vache, image=img, bg="#3a3a3a").pack(side="left", padx=5)
@@ -198,23 +277,75 @@ class Jeu(tk.Frame):
                 frame_vache,
                 text="Acheter",
                 command=lambda v=vache: self.acheter_vache(player, v)
-            ).pack(side="right", padx=5)
+            )
+            
+            bouton_acheter.pack(side="right", padx=5)
 
             self.boutons_achat[vache] = bouton_acheter
 
-            if player.argent < vache.prix:
-                tk.Button().config(state="disabled")
-            else:
-                self.boutons_achat[vache].config(state="normal")
 
 
-            if player.argent < vache.prix * 0.5:
-                masque.place(relwidth=1, relheight=1)
-            else : 
-                masque.place_forget()
+
+    #def vente_recrute(self, recrue, player) : 
+
+    #création d'un bouton pour chaque recrue
+        for recrue in listerecrue:
+            #variables à mettre à jours
+            var = tk.StringVar()
+            var.set(f"Engager pour {simplificateur(recrue.prix)} lacteuros")
+            self.recrue_vars[recrue] = var
+
+            frame_recrue = tk.Frame(self.coworker, bg="#3a3a3a", bd=1, relief="solid")
+            frame_recrue.pack(fill="x", pady=5, padx=5)
+            
+            img = tk.PhotoImage(file=recrue.img)
+            #img = img.subsample(2,2)
+            #charger les images dans images_cache si pas déjà fait
+            if recrue.img not in self.images2_cache:
+                self.images2_cache[recrue.img] = tk.PhotoImage(file=recrue.img)
+            img = self.images2_cache[recrue.img]
+            # image
+            tk.Label(frame_recrue, image=img, bg="#3a3a3a").pack(side="left", padx=5)
+            # zone texte
+            info = tk.Frame(frame_recrue, bg="#3a3a3a")
+            info.pack(side="left", expand=True, fill="x")
+            tk.Label(
+                info,
+                text=recrue.nom,
+                bg="#3a3a3a",
+                fg="white",
+                font=("Arial", 10, "bold")
+            ).pack(anchor="w")
+            tk.Label(
+                info,
+                text=f"{simplificateur(recrue.age)} age",
+                bg="#3a3a3a",
+                fg="lightgreen"
+            ).pack(anchor="w")
+            tk.Label(
+                info,
+                text=f"{simplificateur(recrue.clic)} par clic",
+                bg="#3a3a3a",
+                fg="gold"
+            ).pack(anchor="w")
+            # bouton acheter
+            bouton_acheter = tk.Button(
+                frame_recrue,
+                text="Engager",
+            ).pack(side="right", padx=5)
+            # bouton virer
+            bouton_acheter = tk.Button(
+                frame_recrue,
+                text="Virer",
+            ).pack(side="right", padx=5)
+
 
         #appel de la fonction qui actionne le lait/tour
+        #self.vente_vache(player)
+        #self.vente_recrute(recrue, player)
         self.start_lait_par_seconde()
+
+    
 
 
     def clic_pour_lait(self, player):
@@ -270,4 +401,12 @@ class Jeu(tk.Frame):
         # relance dans 1000ms (1 seconde)
         self.after(1000, self.start_lait_par_seconde)
 
+
+
+
+    def apparition_aleatoire_recrue(self, player):
+        
+
+
+        apparition_recrue(self, player)
 

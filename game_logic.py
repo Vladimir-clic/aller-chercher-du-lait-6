@@ -1,6 +1,7 @@
 from models import *
 import time
 import threading
+import random
 
 def test():
     print("Test réussi")
@@ -90,8 +91,12 @@ def simplificateur(argent):
         return(nombre)
 
 
+#création aléatoire et disparition de recrue
 
-
+def apparition_recrue(self, player):
+    listesecondes = len(player.temps)
+    if listesecondes[-1] == random.randrange(15) :
+        recruealeatoire = recrue(1, "Johnny", 19, 10, random.randrange(10), 5, "images/recrue1.png")
 
     
     

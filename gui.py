@@ -12,7 +12,7 @@ class game_gui(tk.Tk) :
         # créer la fenêtre
         super().__init__()
         self.title("Vache à Lait 🐄")
-        self.minsize(500,400)
+        self.minsize(1000,800)
         #self.geometry("500x400")
 
         #initialisation des conteneurs

@@ -74,7 +74,6 @@ def simplificateur(argent):
         listechiffre[-2] = ","
 
         nombre = ''.join(listechiffre)
-        print(nombre + " M")
         return(nombre + " M")
     
     elif len(listechiffre) > 3:
@@ -84,19 +83,13 @@ def simplificateur(argent):
         listechiffre.append(listechiffre[-1])
         listechiffre[-2] = ","
         nombre = ''.join(listechiffre)
-        print(nombre + " k")
         return(nombre + " k")
 
     elif len(listechiffre) <= 3 :
         nombre = ''.join(listechiffre)
-        print(nombre)
         return(nombre)
 
-        
 
-simplificateur(12700000)
-simplificateur(1582)
-simplificateur(15)
 
 
 

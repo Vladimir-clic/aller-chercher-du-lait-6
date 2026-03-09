@@ -15,6 +15,7 @@ class Jeu(tk.Frame):
 
         self.vache_vars = {}
         self.temps = 0
+        self.laitpartour = 0
 
         #mettre des types 1
         self.configure(bg="#2e2e2e")
@@ -54,7 +55,12 @@ class Jeu(tk.Frame):
             lambda e: self.shop_canvas.configure(scrollregion=self.shop_canvas.bbox("all"))
         )
 
-
+    def miseajour(self, player) : 
+        self.lait_var.set("litre de lait : " + simplificateur(player.lait))
+        self.argent_var.set("Argent : " + simplificateur(player.argent) + " lacteuros")
+        self.temps_var.set("Temps : " + str(self.temps) + " secondes")
+        self.laitparsec_var.set("Lait/s :  " + simplificateur(self.laitpartour) + "/s")
+    
 
 
 
@@ -85,6 +91,15 @@ class Jeu(tk.Frame):
         label = tk.Label(self.header, textvariable= self.argent_var, font=("Arial", 16))
         label.pack()
 
+
+        #lait par seconde
+        self.laitparsec_var = tk.StringVar()
+        self.laitparsec_var.set("Lait/s :  " + simplificateur(self.laitpartour) + "/s")
+
+        label = tk.Label(self.header, textvariable= self.laitparsec_var, font=("Arial", 9))
+        label.pack()
+
+
         #même chose pour le temps
         self.temps_var = tk.StringVar()
         self.temps_var.set("Temps : " + str(self.temps) + " secondes")
@@ -101,7 +116,7 @@ class Jeu(tk.Frame):
         self.bouton_vache = tk.Button(
             self.actions,
             image=self.vache_img,
-            command=lambda: clicpourlait(player),
+            command=lambda: self.clic_pour_lait(player), 
             bd=0
         )
         self.bouton_vache.pack(pady=20)
@@ -202,16 +217,14 @@ class Jeu(tk.Frame):
         self.start_lait_par_seconde()
 
 
-
+    def clic_pour_lait(self, player):
+        clicpourlait(player)
+        self.miseajour(player)
 
 
     def vendre_lait(self, player):
         vendrelait(player)
-
-        # Mise à jour lait/argent si besoin
-        self.lait_var.set("litre de lait : " + str(simplificateur(player.lait)))
-        self.argent_var.set("Argent : " + str(simplificateur(player.argent)) + " lacteuros")
-        self.temps_var.set("Temps : " + str(self.temps) + " secondes")
+        self.miseajour(player)
 
 
 
@@ -221,17 +234,15 @@ class Jeu(tk.Frame):
 
             # Mise à jour du bouton correspondant
             self.vache_vars[vache].set(
-                f"x {vache.nombre} | {vache.prix} lacteuros")
+                f"x {simplificateur(vache.nombre)} | {simplificateur(vache.prix)} lacteuros")
 
         elif player.argent < vache.prix :
             print(f"tu n'as pas assez d'argent pour acheter une {vache.nom}")
-            self.argent_var.set("Argent : " + simplificateur(str(player.argent)) + " lacteuros")
+            
 
 
         # Mise à jour lait/argent si besoin
-        self.lait_var.set("litre de lait : " + simplificateur(str(player.lait)))
-        self.argent_var.set("Argent : " + simplificateur(str(player.argent)) + " lacteuros")
-        self.temps_var.set("Temps : " + str(self.temps) + " secondes")
+        self.miseajour(player)
 
 
 
@@ -240,7 +251,6 @@ class Jeu(tk.Frame):
 
     def start_lait_par_seconde(self):
         player = self.controller.joueur
-        #incrémentation de lait par tour à 0
         self.laitpartour = 0
 
         #compter le lait par tour
@@ -251,13 +261,13 @@ class Jeu(tk.Frame):
         #incrémente le temps de 1
         self.temps += 1
         self.temps_var.set("Temps : " + str(self.temps) + " secondes")
-        print(f"temps = {self.temps}")
+        print(f"temps = {str(self.temps)}")
 
 
-        self.lait_var.set("litre de lait : " + str(player.lait))
+        self.miseajour(player)
         print(f"Tu as gagné {simplificateur(self.laitpartour)} litre de lait")
 
         # relance dans 1000ms (1 seconde)
         self.after(1000, self.start_lait_par_seconde)
 
-    
+

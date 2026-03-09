@@ -20,11 +20,15 @@ class vache :
         self.nombre = nombre
         self.img = img
 
+
 vache1 = vache(1,"Charolaise", 10, 1, 0, "images/charolaise.png")
 vache2 = vache(2,"Limousine", 100, 3, 0, "images/limousine.png")
 vache3 = vache(3,"Blanc-Bleu-Belge", 700, 10, 0, "images/blanc_bleu_belge.png")
-vache4 = vache(4,"Braford", 1200, 120, 0, "images/braford.png")
-vache5 = vache(5,"Galloway Ceinturée", 15000, 500, 0, "images/galloway_ceinturee.png")
-vache6 = vache(6,"Holstein", 200000, 1000, 0, "images/holstein.png")
+vache4 = vache(4,"Braford", 15000, 25, 0, "images/braford.png")
+vache5 = vache(5,"Galloway Ceinturée", 250000, 50, 0, "images/galloway_ceinturee.png")
+vache6 = vache(6,"Holstein", 1000000, 120, 0, "images/holstein.png")
+vache7 = vache(7,"Nélore", 50000000, 300, 0, "images/nelore.png")
 
-listevache = [vache1, vache2, vache3, vache4, vache5, vache6]
+listevache = [vache1, vache2, vache3, vache4, vache5, vache6, vache7]
+
+

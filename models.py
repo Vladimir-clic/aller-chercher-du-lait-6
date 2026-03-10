@@ -44,12 +44,27 @@ class recrue :
         self.peremption = peremption #temps de vie si pas acheté
         self.img = img    
 
-recrue1 = recrue(1, "Johnny", 19, 10, random.randrange(10),0, 7, "images/recrue1.png")
-recrue2 = recrue(2, "Tonny", 19, 10, 1, 0, 8, "images/recrue1.png")
+#recrue1 = recrue(1, "Johnny", 19, 10, random.randrange(10),0, 7, "images/recrue1.png")
+#recrue2 = recrue(2, "Tonny", 19, 10, 1, 0, 8, "images/recrue1.png")
 
 listerecrue = []
 #laitparclic = 1
-dictrecrue = {1 : recrue1, 2 : recrue2}
+dictrecrue = {
+    #1 : recrue1, 2 : recrue2
+    }
+
+listeimage = [
+    "images/recrue1.png",
+    "images/recrue2.png",
+    "images/recrue3.png",
+    "images/recrue4.png",
+    "images/recrue5.png",
+    "images/recrue6.png",
+    "images/recrue7.png",
+    "images/recrue8.png",
+    "images/recrue9.png",
+    "images/recrue10.png",
+]
 
 
 

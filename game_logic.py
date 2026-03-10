@@ -108,6 +108,7 @@ def apparition_recrue(temps):
             id = max(dictrecrue.keys()) + 1
 
         peremption = random.randint(10, 30)
+        randomimage = random.randrange(len(listeimage))
         randomrecrue = recrue(id, #id
                               "Randomrecrue", #nom
                               random.randint(18,60), #age
@@ -115,7 +116,7 @@ def apparition_recrue(temps):
                               random.randrange(10), #clic
                               0, #countnaissance
                               peremption, #péremption
-                              "images/recrue1.png") #image
+                              listeimage[randomimage]) #image
         
         print(f"Recrue {randomrecrue.nom} avec l'id {randomrecrue.id}")
         dictrecrue[randomrecrue.id] = randomrecrue
@@ -127,14 +128,14 @@ def apparition_recrue(temps):
     
 
 def suppression_recrue():
+    suppression_effectuee = False
     for id in list(dictrecrue):
         r = dictrecrue[id]
-        if r.peremption < r.countnaissance:
+        if r.countnaissance >= r.peremption:
             del dictrecrue[id]
-            reponse = True
+            suppression_effectuee = True
 
         else:
             r.countnaissance += 1
-            reponse = False
-    #return reponse
+    return suppression_effectuee
     

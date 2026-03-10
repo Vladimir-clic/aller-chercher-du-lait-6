@@ -34,19 +34,21 @@ vache7 = vache(7,"Nélore", 50000000, 300, 0, "images/nelore.png")
 listevache = [vache1, vache2, vache3, vache4, vache5, vache6, vache7]
 
 class recrue : 
-    def __init__(self, id, nom, age, prix, clic, peremption, img):
+    def __init__(self, id, nom, age, prix, clic, countnaissance, peremption, img):
         self.id = id
         self.nom = nom 
         self.age = age
         self.prix = prix #prix d'emploi
         self.clic = clic #capacité de clic
+        self.countnaissance = countnaissance
         self.peremption = peremption #temps de vie si pas acheté
         self.img = img    
 
-recrue1 = recrue(1, "Johnny", 19, 10, random.randrange(10), 7, "images/recrue1.png")
-recrue2 = recrue(2, "Tonny", 19, 10, 1, 8, "images/recrue1.png")
+recrue1 = recrue(1, "Johnny", 19, 10, random.randrange(10),0, 7, "images/recrue1.png")
+recrue2 = recrue(2, "Tonny", 19, 10, 1, 0, 8, "images/recrue1.png")
 
-listerecrue = [recrue1, recrue2]
+listerecrue = []
+dictrecrue = {1 : recrue1, 2 : recrue2}
 
 
 

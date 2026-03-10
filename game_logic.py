@@ -92,11 +92,40 @@ def simplificateur(argent):
 
 
 #création aléatoire et disparition de recrue
+def apparition_recrue(temps):
+    chiffre = temps % 10
+    randomnumber = random.randrange(10)
+    print(f"nombre aléatoire : {randomnumber} contre {chiffre}")
+    if chiffre == random.randrange(10) :
 
-def apparition_recrue(self, player):
-    listesecondes = len(player.temps)
-    if listesecondes[-1] == random.randrange(15) :
-        recruealeatoire = recrue(1, "Johnny", 19, 10, random.randrange(10), 5, "images/recrue1.png")
+        print("création d'une recrue")
+        
+        if len(dictrecrue) == 0:
+            id = 1
+        else :
+            id = max(dictrecrue.keys()) + 1
 
+        peremption = random.randint(10, 30)
+        randomrecrue = recrue(id, #id
+                              "Randomrecrue", #nom
+                              random.randint(18,60), #age
+                              10, #prix
+                              random.randrange(10), #clic
+                              0, #countnaissance
+                              peremption, #péremption
+                              "images/recrue1.png") #image
+        
+        print(f"Recrue {randomrecrue.nom} avec l'id {randomrecrue.id}")
+        dictrecrue[randomrecrue.id] = randomrecrue
+    else:
+        return 0
     
+
+def suppression_recrue():
+    for id in list(dictrecrue):
+        r = dictrecrue[id]
+        if r.peremption < r.countnaissance:
+            del dictrecrue[id]
+        else:
+            r.countnaissance += 1
     

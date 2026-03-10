@@ -171,7 +171,7 @@ class Jeu(tk.Frame):
         self.laitparsec_var = tk.StringVar()
         self.laitparsec_var.set("Lait/s :  " + simplificateur(self.laitpartour) + "/s")
 
-        label = tk.Label(self.header, textvariable= self.laitparsec_var, font=("Arial", 9))
+        label = tk.Label(self.actions, textvariable= self.laitparsec_var, font=("Arial", 9))
         label.pack()
 
 
@@ -217,9 +217,18 @@ class Jeu(tk.Frame):
         self.vache_vars = {}
         self.boutons_achat = {}
 
+        #appelle des fonctions : 
+        self.refresh_vache(player)
+        self.refresh_coworker()
+        #appel de la fonction qui actionne le lait/tour
+        #self.vente_vache(player)
+        #self.vente_recrute(recrue, player)
+        self.start_lait_par_seconde()
+        #self.apparition_aleatoire_recrue(self)
 
 
-    #def vente_vache(self, player) : 
+
+    def refresh_vache(self, player) : 
 
     #création d'un bouton pour chaque vaches
         for vache in player.vaches:
@@ -286,10 +295,26 @@ class Jeu(tk.Frame):
 
 
 
-    #def vente_recrute(self, recrue, player) : 
+    def refresh_coworker(self) : 
+        
+        #se vide et se reremplit
+        for widget in self.coworker.winfo_children():
+            widget.destroy()
+        self.recrue_vars = {}
+
+        if not dictrecrue:
+            tk.Label(
+                self.coworker,
+                text="Aucune recrue disponible",
+                bg="#252525", fg="gray",
+                font=("Arial", 10, "italic")
+            ).pack(pady=20)
+            return
+
+        player = self.controller.joueur
 
     #création d'un bouton pour chaque recrue
-        for recrue in listerecrue:
+        for recrue in dictrecrue.values():
             #variables à mettre à jours
             var = tk.StringVar()
             var.set(f"Engager pour {simplificateur(recrue.prix)} lacteuros")
@@ -298,7 +323,7 @@ class Jeu(tk.Frame):
             frame_recrue = tk.Frame(self.coworker, bg="#3a3a3a", bd=1, relief="solid")
             frame_recrue.pack(fill="x", pady=5, padx=5)
             
-            img = tk.PhotoImage(file=recrue.img)
+            #img = tk.PhotoImage(file=recrue.img)
             #img = img.subsample(2,2)
             #charger les images dans images_cache si pas déjà fait
             if recrue.img not in self.images2_cache:
@@ -309,6 +334,7 @@ class Jeu(tk.Frame):
             # zone texte
             info = tk.Frame(frame_recrue, bg="#3a3a3a")
             info.pack(side="left", expand=True, fill="x")
+
             tk.Label(
                 info,
                 text=recrue.nom,
@@ -328,22 +354,25 @@ class Jeu(tk.Frame):
                 bg="#3a3a3a",
                 fg="gold"
             ).pack(anchor="w")
+
             # bouton acheter
-            bouton_acheter = tk.Button(
+            tk.Button(
                 frame_recrue,
-                text="Engager",
-            ).pack(side="right", padx=5)
-            # bouton virer
-            bouton_acheter = tk.Button(
-                frame_recrue,
-                text="Virer",
+                text=f"Engager pour {recrue.prix} lacteuros",
+                command=lambda r=recrue : self.engager_recrue(player, r)
             ).pack(side="right", padx=5)
 
+    
+            #Afficher le temps restant avant expiration
+            temps_restant = recrue.peremption - recrue.countnaissance
+            tk.Label(info, 
+                text=f"Expire dans {temps_restant}s",
+                bg="#3a3a3a", 
+                fg="orange"
+            ).pack(anchor="w")
 
-        #appel de la fonction qui actionne le lait/tour
-        #self.vente_vache(player)
-        #self.vente_recrute(recrue, player)
-        self.start_lait_par_seconde()
+
+
 
     
 
@@ -370,6 +399,17 @@ class Jeu(tk.Frame):
         elif player.argent < vache.prix :
             print(f"tu n'as pas assez d'argent pour acheter une {vache.nom}")
             
+
+    def engager_recrue(self, player, recrue):
+        if player.argent >= recrue.prix:
+            player.argent -= recrue.prix
+            del dictrecrue[recrue.id]
+            print(f"{recrue.nom} engagé !")
+            self.miseajour(player)
+            self.refresh_coworker()
+        else:
+            print("Pas assez d'argent pour engager cette recrue")
+
 
 
         # Mise à jour lait/argent si besoin
@@ -398,15 +438,19 @@ class Jeu(tk.Frame):
         self.miseajour(player)
         print(f"Tu as gagné {simplificateur(self.laitpartour)} litre de lait")
 
+        self.apparition_aleatoire_recrue()
+
         # relance dans 1000ms (1 seconde)
         self.after(1000, self.start_lait_par_seconde)
 
 
 
 
-    def apparition_aleatoire_recrue(self, player):
-        
+    def apparition_aleatoire_recrue(self) :
+        #faire apparître et supprimer les recrues expirées
+        apparition_recrue(self.temps)
+        suppression_recrue()
+        #rafraîchir l'affichage du panel coworker
+        self.refresh_coworker()
 
-
-        apparition_recrue(self, player)
 

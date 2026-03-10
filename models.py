@@ -48,6 +48,7 @@ recrue1 = recrue(1, "Johnny", 19, 10, random.randrange(10),0, 7, "images/recrue1
 recrue2 = recrue(2, "Tonny", 19, 10, 1, 0, 8, "images/recrue1.png")
 
 listerecrue = []
+#laitparclic = 1
 dictrecrue = {1 : recrue1, 2 : recrue2}
 
 

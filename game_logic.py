@@ -55,9 +55,11 @@ def achetervache(j, v) :
 
 
 
-def clicpourlait(j) :
+def clicpourlait(j, laitparclic) :
+    for recrue in listerecrue:
+        j.lait+= recrue.clic
     j.lait += 1
-    print("+ 1")
+    print(f"+ {laitparclic}")
 
 
 def vendrelait(j):
@@ -117,8 +119,11 @@ def apparition_recrue(temps):
         
         print(f"Recrue {randomrecrue.nom} avec l'id {randomrecrue.id}")
         dictrecrue[randomrecrue.id] = randomrecrue
+        reponse = True
+
     else:
-        return 0
+        reponse = False
+    return reponse
     
 
 def suppression_recrue():
@@ -126,6 +131,10 @@ def suppression_recrue():
         r = dictrecrue[id]
         if r.peremption < r.countnaissance:
             del dictrecrue[id]
+            reponse = True
+
         else:
             r.countnaissance += 1
+            reponse = False
+    #return reponse
     

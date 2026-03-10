@@ -23,6 +23,7 @@ class Jeu(tk.Frame):
 
         self.temps = 0
         self.laitpartour = 0
+        self.laitparclic = 1
 
 
 
@@ -135,6 +136,8 @@ class Jeu(tk.Frame):
         self.argent_var.set("Argent : " + simplificateur(player.argent) + " lacteuros")
         self.temps_var.set("Temps : " + str(self.temps) + " secondes")
         self.laitparsec_var.set("Lait/s :  " + simplificateur(self.laitpartour) + "/s")
+        self.recrueclic_var.set("Lait par clic :  " + simplificateur(self.laitparclic) + " /clic")
+        self.update_expiration_labels()
     
 
 
@@ -180,6 +183,13 @@ class Jeu(tk.Frame):
         self.temps_var.set("Temps : " + str(self.temps) + " secondes")
 
         label = tk.Label(self.footer, textvariable= self.temps_var, font=("Arial", 9))
+        label.pack()
+
+        #update les clics par recrues
+        self.recrueclic_var = tk.StringVar()
+        self.recrueclic_var.set("Lait par clic :  " + simplificateur(self.laitparclic) + " /clic")
+
+        label = tk.Label(self.actions, textvariable= self.recrueclic_var, font=("Arial", 9))
         label.pack()
 
         
@@ -301,6 +311,7 @@ class Jeu(tk.Frame):
         for widget in self.coworker.winfo_children():
             widget.destroy()
         self.recrue_vars = {}
+        self.expiration_labels = {}
 
         if not dictrecrue:
             tk.Label(
@@ -362,11 +373,15 @@ class Jeu(tk.Frame):
                 command=lambda r=recrue : self.engager_recrue(player, r)
             ).pack(side="right", padx=5)
 
-    
-            #Afficher le temps restant avant expiration
-            temps_restant = recrue.peremption - recrue.countnaissance
+            #label d'expiration avec StringVar pour pouvoir modifier la var
+            expiration_var = tk.StringVar()
+            expiration_var.set(f"Expire dans {recrue.peremption - recrue.countnaissance}s")
+            
+            #stocker la var dans le dictionnaire
+            self.expiration_labels[recrue.id] = expiration_var
+            
             tk.Label(info, 
-                text=f"Expire dans {temps_restant}s",
+                textvariable=expiration_var,
                 bg="#3a3a3a", 
                 fg="orange"
             ).pack(anchor="w")
@@ -378,7 +393,7 @@ class Jeu(tk.Frame):
 
 
     def clic_pour_lait(self, player):
-        clicpourlait(player)
+        clicpourlait(player, self.laitparclic)
         self.miseajour(player)
 
 
@@ -400,11 +415,13 @@ class Jeu(tk.Frame):
             print(f"tu n'as pas assez d'argent pour acheter une {vache.nom}")
             
 
-    def engager_recrue(self, player, recrue):
-        if player.argent >= recrue.prix:
-            player.argent -= recrue.prix
-            del dictrecrue[recrue.id]
-            print(f"{recrue.nom} engagé !")
+    def engager_recrue(self, player, rec):
+        if player.argent >= rec.prix:
+            player.argent -= rec.prix
+            del dictrecrue[rec.id]
+            print(f"{rec.nom} engagé !")
+            self.laitparclic += rec.clic
+            listerecrue.append(rec)
             self.miseajour(player)
             self.refresh_coworker()
         else:
@@ -446,11 +463,22 @@ class Jeu(tk.Frame):
 
 
 
-    def apparition_aleatoire_recrue(self) :
-        #faire apparître et supprimer les recrues expirées
-        apparition_recrue(self.temps)
-        suppression_recrue()
-        #rafraîchir l'affichage du panel coworker
-        self.refresh_coworker()
+    def apparition_aleatoire_recrue(self):
+        reponse_apparition = apparition_recrue(self.temps)
+        reponse_suppression = suppression_recrue()
+
+        if reponse_apparition == True or reponse_suppression == True:
+            # Recrue ajoutée ou supprimée → on recrée les widgets
+            self.refresh_coworker()
+        else:
+            # Rien de changé → on met juste à jour les labels de temps
+            self.update_expiration_labels()
+
+    def update_expiration_labels(self):
+        for id, var in self.expiration_labels.items():
+            if id in dictrecrue:
+                r = dictrecrue[id]
+                temps_restant = r.peremption - r.countnaissance
+                var.set(f"Expire dans {temps_restant}s")
 
 

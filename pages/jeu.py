@@ -134,7 +134,7 @@ class Jeu(tk.Frame):
     def miseajour(self, player) : 
         self.lait_var.set("litre de lait : " + simplificateur(player.lait))
         self.argent_var.set("Argent : " + simplificateur(player.argent) + " lacteuros")
-        self.temps_var.set("Temps : " + str(self.temps) + " secondes")
+        self.temps_var.set("Temps : " + simplificateur_temps(self.temps))
         self.laitparsec_var.set("Lait/s :  " + simplificateur(self.laitpartour) + "/s")
         self.recrueclic_var.set("Lait par clic :  " + simplificateur(self.laitparclic) + " /clic")
         self.update_expiration_labels()
@@ -348,20 +348,20 @@ class Jeu(tk.Frame):
 
             tk.Label(
                 info,
-                text=recrue.nom,
+                text=f"{recrue.prenom} {recrue.nom}",
                 bg="#3a3a3a",
                 fg="white",
                 font=("Arial", 10, "bold")
             ).pack(anchor="w")
             tk.Label(
                 info,
-                text=f"{simplificateur(recrue.age)} age",
+                text=f"{simplificateur(recrue.age)} ans",
                 bg="#3a3a3a",
                 fg="lightgreen"
             ).pack(anchor="w")
             tk.Label(
                 info,
-                text=f"{simplificateur(recrue.clic)} par clic",
+                text=f"{simplificateur(recrue.clic)}/clic | {recrue.prix} lacteuros",
                 bg="#3a3a3a",
                 fg="gold"
             ).pack(anchor="w")
@@ -369,7 +369,7 @@ class Jeu(tk.Frame):
             # bouton acheter
             tk.Button(
                 frame_recrue,
-                text=f"Engager pour {recrue.prix} lacteuros",
+                text=f"Engager",
                 command=lambda r=recrue : self.engager_recrue(player, r)
             ).pack(side="right", padx=5)
 
@@ -448,7 +448,7 @@ class Jeu(tk.Frame):
 
         #incrémente le temps de 1
         self.temps += 1
-        self.temps_var.set("Temps : " + str(self.temps) + " secondes")
+        self.temps_var.set("Temps : " + simplificateur_temps(self.temps))
         print(f"temps = {str(self.temps)}")
 
 

@@ -66,6 +66,19 @@ def vendrelait(j):
     j.argent += j.lait
     j.lait = 0
 
+
+#pas parfait, à continuer
+def simplificateur_temps(temps):
+
+    minutes = int(temps/60)
+    
+    if minutes < 1 :
+        return str(temps) + "s"
+    else :
+        return str(minutes) + "min"
+    
+
+
 def simplificateur(argent):
     strargent = str(argent)
     listechiffre = list(strargent)
@@ -107,16 +120,25 @@ def apparition_recrue(temps):
         else :
             id = max(dictrecrue.keys()) + 1
 
-        peremption = random.randint(10, 30)
-        randomimage = random.randrange(len(listeimage))
         randomrecrue = recrue(id, #id
-                              "Randomrecrue", #nom
+                              "Randomrecrue", #prenom
+                              listenom[random.randrange(len(listenom))], #nom
                               random.randint(18,60), #age
-                              10, #prix
+                              listesexe[random.randint(0,1)], #sexe
+                              random.randrange(1000), #prix
                               random.randrange(10), #clic
                               0, #countnaissance
-                              peremption, #péremption
-                              listeimage[randomimage]) #image
+                              random.randint(10, 30), #péremption
+                              "none") #image
+        
+        if randomrecrue.sexe == "M" :
+            randomrecrue.prenom = listeprenomM[random.randrange(len(listeprenomM))]
+            randomrecrue.img = listeimageM[random.randrange(len(listeimageM))]
+
+        elif randomrecrue.sexe == "F" :
+            randomrecrue.prenom = listeprenomF[random.randrange(len(listeprenomF))]
+            randomrecrue.img = listeimageF[random.randrange(len(listeimageF))]
+
         
         print(f"Recrue {randomrecrue.nom} avec l'id {randomrecrue.id}")
         dictrecrue[randomrecrue.id] = randomrecrue

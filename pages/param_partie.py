@@ -9,6 +9,9 @@ class Param_partie(tk.Frame):
         label = tk.Label(self, text="Paramètre de la partie", font=("Arial", 16))
         label.pack()
 
+        label = tk.Label(self, text="Entre ton nom :", font=("Arial", 10))
+        label.pack()
+
         entry = tk.Entry(self)
         entry.pack()
 

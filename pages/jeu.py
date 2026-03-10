@@ -1,6 +1,7 @@
 import tkinter as tk
 import time
 import random
+from pages.jeu_details_recrue import Jeu_details_recrue
 
 from game_logic import *
 
@@ -191,6 +192,12 @@ class Jeu(tk.Frame):
 
         label = tk.Label(self.actions, textvariable= self.recrueclic_var, font=("Arial", 9))
         label.pack()
+
+        #bouton pour voir les recrues
+        tk.Button(
+            self,
+            text="Voir recrues",
+            command=lambda: self.controller.show_frame(Jeu_details_recrue)).pack()
 
         
 

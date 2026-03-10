@@ -4,6 +4,7 @@ from pages.menu import Menu
 from pages.options import Options
 from pages.param_partie import Param_partie
 from pages.jeu import Jeu
+from pages.jeu_details_recrue import Jeu_details_recrue
 
 
 class game_gui(tk.Tk) : 
@@ -27,7 +28,7 @@ class game_gui(tk.Tk) :
         self.frames = {}
 
         # création des pages
-        for Page in (Menu, Options, Param_partie, Jeu):
+        for Page in (Menu, Options, Param_partie, Jeu, Jeu_details_recrue):
             frame = Page(container, self)
             self.frames[Page] = frame
             frame.grid(row=0, column=0, sticky="nsew")
